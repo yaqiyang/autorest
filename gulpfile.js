@@ -108,6 +108,33 @@ var rubyMappings = {
   'custom_base_uri_more':['../../dev/TestServer/swagger/custom-baseUrl-more-options.json', 'CustomBaseUriMoreModule']
 };
 
+var phpMappings = {
+    'boolean': ['../../dev/TestServer/swagger/body-boolean.json', 'BooleanModule'],
+    'integer': ['../../dev/TestServer/swagger/body-integer.json', 'IntegerModule'],
+    'number': ['../../dev/TestServer/swagger/body-number.json', 'NumberModule'],
+    'string': ['../../dev/TestServer/swagger/body-string.json', 'StringModule'],
+    'byte': ['../../dev/TestServer/swagger/body-byte.json', 'ByteModule'],
+    'array': ['../../dev/TestServer/swagger/body-array.json', 'ArrayModule'],
+    'dictionary': ['../../dev/TestServer/swagger/body-dictionary.json', 'DictionaryModule'],
+    'date': ['../../dev/TestServer/swagger/body-date.json', 'DateModule'],
+    'datetime': ['../../dev/TestServer/swagger/body-datetime.json', 'DatetimeModule'],
+    'datetime_rfc1123': ['../../dev/TestServer/swagger/body-datetime-rfc1123.json', 'DatetimeRfc1123Module'],
+    'duration': ['../../dev/TestServer/swagger/body-duration.json', 'DurationModule'],
+    'complex': ['../../dev/TestServer/swagger/body-complex.json', 'ComplexModule'],
+    'url': ['../../dev/TestServer/swagger/url.json', 'UrlModule'],
+    'url_items': ['../../dev/TestServer/swagger/url.json', 'UrlModule'],
+    'url_query': ['../../dev/TestServer/swagger/url.json', 'UrlModule'],
+    'header_folder': ['../../dev/TestServer/swagger/header.json', 'HeaderModule'],
+    'http_infrastructure': ['../../dev/TestServer/swagger/httpInfrastructure.json', 'HttpInfrastructureModule'],
+    'required_optional': ['../../dev/TestServer/swagger/required-optional.json', 'RequiredOptionalModule'],
+    'report': ['../../dev/TestServer/swagger/report.json', 'ReportModule'],
+    'model_flattening': ['../../dev/TestServer/swagger/model-flattening.json', 'ModelFlatteningModule'],
+    'parameter_flattening': ['../../dev/TestServer/swagger/parameter-flattening.json', 'ParameterFlatteningModule'],
+    'validation': ['../../dev/TestServer/swagger/validation.json', 'ValidationModule'],
+    'custom_base_uri': ['../../dev/TestServer/swagger/custom-baseUrl.json', 'CustomBaseUriModule'],
+    'custom_base_uri_more': ['../../dev/TestServer/swagger/custom-baseUrl-more-options.json', 'CustomBaseUriMoreModule']
+};
+
 var defaultAzureMappings = {
   'AcceptanceTests/Lro': '../../dev/TestServer/swagger/lro.json',
   'AcceptanceTests/Paging': '../../dev/TestServer/swagger/paging.json',
@@ -149,6 +176,18 @@ var rubyAzureMappings = {
   'parameter_grouping':['../../dev/TestServer/swagger/azure-parameter-grouping.json', 'ParameterGroupingModule']
 };
 
+var phpAzureMappings = {
+    'head': ['../../dev/TestServer/swagger/head.json', 'HeadModule'],
+    'head_exceptions': ['../../dev/TestServer/swagger/head-exceptions.json', 'HeadExceptionsModule'],
+    'paging': ['../../dev/TestServer/swagger/paging.json', 'PagingModule'],
+    'azure_resource': ['../../dev/TestServer/swagger/azure-resource.json', 'AzureResourceModule'],
+    'lro': ['../../dev/TestServer/swagger/lro.json', 'LroModule'],
+    'azure_url': ['../../dev/TestServer/swagger/subscriptionId-apiVersion.json', 'AzureUrlModule'],
+    'azure_special_properties': ['../../dev/TestServer/swagger/azure-special-properties.json', 'AzureSpecialPropertiesModule'],
+    'azure_report': ['../../dev/TestServer/swagger/azure-report.json', 'AzureReportModule'],
+    'parameter_grouping': ['../../dev/TestServer/swagger/azure-parameter-grouping.json', 'ParameterGroupingModule']
+};
+
 gulp.task('regenerate:expected', function(cb){
   runSequence('regenerate:delete',
     [
@@ -163,7 +202,9 @@ gulp.task('regenerate:expected', function(cb){
       'regenerate:expected:javaazurefluent',
       'regenerate:expected:python',
       'regenerate:expected:pythonazure',
-      'regenerate:expected:samples'
+      'regenerate:expected:samples',
+      'regenerate:expected:php',
+      'regenerate:expected:phpazure'
     ],
     cb);
 });
@@ -284,6 +325,28 @@ gulp.task('regenerate:expected:ruby', function(cb){
     'codeGenerator': 'Ruby',
     'nsPrefix': 'MyNamespace'
   }, cb);
+})
+
+gulp.task('regenerate:expected:phpazure', function (cb) {
+    regenExpected({
+        'outputBaseDir': 'src/generator/AutoRest.Php.Azure.Tests',
+        'inputBaseDir': 'src/generator/AutoRest.CSharp.Azure.Tests',
+        'mappings': phpAzureMappings,
+        'outputDir': 'RspecTests/Generated',
+        'codeGenerator': 'Azure.Php',
+        'nsPrefix': 'MyNamespace'
+    }, cb);
+})
+
+gulp.task('regenerate:expected:php', function (cb) {
+    regenExpected({
+        'outputBaseDir': 'src/generator/AutoRest.Php.Tests',
+        'inputBaseDir': 'src/generator/AutoRest.CSharp.Tests',
+        'mappings': phpMappings,
+        'outputDir': 'RspecTests/Generated',
+        'codeGenerator': 'Php',
+        'nsPrefix': 'MyNamespace'
+    }, cb);
 })
 
 gulp.task('regenerate:expected:javaazure', function(cb){
@@ -598,7 +661,7 @@ gulp.task('syncDependencies:nuspec', function() {
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('syncDependencies:runtime', ['syncDependencies:runtime:cs', 'syncDependencies:runtime:csazure', 'syncDependencies:runtime:node', 'syncDependencies:runtime:nodeazure', 'syncDependencies:runtime:ruby', 'syncDependencies:runtime:rubyazure']);
+gulp.task('syncDependencies:runtime', ['syncDependencies:runtime:cs', 'syncDependencies:runtime:csazure', 'syncDependencies:runtime:node', 'syncDependencies:runtime:nodeazure', 'syncDependencies:runtime:ruby', 'syncDependencies:runtime:rubyazure', 'syncDependencies:runtime:php', 'syncDependencies:runtime:phpazure']);
 
 gulp.task('syncDependencies', ['syncDependencies:nugetProj', 'syncDependencies:nuspec', 'syncDependencies:runtime']);
 
@@ -637,12 +700,15 @@ gulp.task('test:clientruntime:java', shell.task(basePathOrThrow() + '/gradlew :c
 gulp.task('test:clientruntime:javaazure', shell.task(basePathOrThrow() + '/gradlew :azure-client-runtime:check', { cwd: './', verbosity: 3 }));
 gulp.task('test:clientruntime:python', shell.task('tox', { cwd: './src/client/Python/msrest/', verbosity: 3 }));
 gulp.task('test:clientruntime:pythonazure', shell.task('tox', { cwd: './src/client/Python/msrestazure/', verbose:true }));
+gulp.task('test:clientruntime:php', ['syncDependencies:runtime:php'], shell.task('bundle exec rspec', { cwd: './src/client/Php/ms-rest/', verbosity: 3 }));
+gulp.task('test:clientruntime:phpazure', ['syncDependencies:runtime:phpazure'], shell.task('bundle exec rspec', { cwd: './src/client/Php/ms-rest-azure/', verbosity: 3 }));
 
 gulp.task('test:clientruntime:javaauthjdk', shell.task(basePathOrThrow() + '/gradlew :azure-client-authentication:check', { cwd: './', verbosity: 3 }));
 gulp.task('test:clientruntime:javaauthandroid', shell.task(basePathOrThrow() + '/gradlew :azure-android-client-authentication:check', { cwd: './', verbosity: 3 }));
 gulp.task('test:clientruntime', function (cb) {
   runSequence('test:clientruntime:node', 'test:clientruntime:nodeazure',
     'test:clientruntime:ruby', 'test:clientruntime:rubyazure',
+    'test:clientruntime:php', 'test:clientruntime:phpazure',
     'test:clientruntime:python', 'test:clientruntime:pythonazure',
     'test:clientruntime:java', 'test:clientruntime:javaazure',
     'test:clientruntime:javaauthjdk', 'test:clientruntime:javaauthandroid', cb);
@@ -653,6 +719,9 @@ gulp.task('test:node:azure', shell.task('npm test', {cwd: './src/generator/AutoR
 
 gulp.task('test:ruby', ['regenerate:expected:ruby'], shell.task('ruby RspecTests/tests_runner.rb', { cwd: './src/generator/AutoRest.Ruby.Tests', verbosity: 3 }));
 gulp.task('test:ruby:azure', ['regenerate:expected:rubyazure'], shell.task('ruby RspecTests/tests_runner.rb', { cwd: './src/generator/AutoRest.Ruby.Azure.Tests', verbosity: 3 }));
+
+gulp.task('test:php', ['regenerate:expected:php'], shell.task('php RspecTests/tests_runner.rb', { cwd: './src/generator/AutoRest.Phpy.Tests', verbosity: 3 }));
+gulp.task('test:php:azure', ['regenerate:expected:phpazure'], shell.task('php RspecTests/tests_runner.rb', { cwd: './src/generator/AutoRest.Php.Azure.Tests', verbosity: 3 }));
 
 gulp.task('test:java', shell.task(basePathOrThrow() + '/gradlew :codegen-tests:check', {cwd: './', verbosity: 3}));
 gulp.task('test:java:azure', shell.task(basePathOrThrow() + '/gradlew :azure-codegen-tests:check', {cwd: './', verbosity: 3}));
@@ -782,6 +851,8 @@ gulp.task('test', function(cb){
       'test:java:azure',
       'test:python',
       'test:python:azure',
+      'test:php',
+      'test:php:azure',
       cb);
   } else {
     runSequence(
@@ -795,6 +866,8 @@ gulp.task('test', function(cb){
       'test:java:azure',
       'test:python',
       'test:python:azure',
+       'test:php',
+      'test:php:azure',
       cb);
   }
 });

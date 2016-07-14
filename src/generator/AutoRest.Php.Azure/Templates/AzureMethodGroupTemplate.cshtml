@@ -1,0 +1,42 @@
+﻿@using AutoRest.Php.Azure.TemplateModels
+@using AutoRest.Php.Azure.Templates
+@using AutoRest.Php.Templates
+@inherits AutoRest.Core.Template<AutoRest.Php.Azure.TemplateModels.AzureMethodGroupTemplateModel>
+
+@(Include(new ModuleDefinitionTemplate(), Model.ModuleDefinitionTemplateModel))
+@EmptyLine
+namespace @Settings.Namespace;
+@EmptyLine
+@foreach (var include in Model.Includes)
+{
+@:@include;
+}
+
+@EmptyLine
+/**
+@WrapComment(" * ", string.IsNullOrEmpty(Model.Documentation) ? string.Format("{0}.", Model.MethodGroupName) : string.Format("{0} for {1}", Model.MethodGroupName, Model.Documentation))
+ */
+class @(Model.MethodGroupName)
+{
+    /**
+     * The service client object for the operations.
+     *
+     * @@var @(Model.ServiceClient.Name)
+     */
+    private $_client;
+    @EmptyLine
+    /**
+     * Creates a new instance for @(Model.MethodGroupName).
+     *
+     * @@param @Model.ServiceClient.Name, Service client for @(Model.MethodGroupName)
+     */
+    public function __construct($client)
+     {
+        $this->_client = $client;
+     }
+    @foreach(var method in Model.MethodTemplateModels)
+     {
+         @EmptyLine
+    @:@(Include(new AzureMethodTemplate(), method as AzureMethodTemplateModel))
+    }
+}

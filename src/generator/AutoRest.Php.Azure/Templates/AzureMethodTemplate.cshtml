@@ -1,0 +1,84 @@
+@using System
+@using System.Net
+@using AutoRest.Php
+@using AutoRest.Php.TemplateModels
+@using AutoRest.Php.Templates
+@using AutoRest.Php.Azure.TemplateModels
+@using AutoRest.Php.Azure.Templates
+@using AutoRest.Core.ClientModel;
+@inherits AutoRest.Core.Template<AutoRest.Php.Azure.TemplateModels.AzureMethodTemplateModel>
+
+
+@if (!Model.IsLongRunningOperation)
+{
+@:@(Include(new MethodTemplate(), (MethodTemplateModel)Model))
+}
+else
+{
+<text>
+/**
+@if (!String.IsNullOrEmpty(Model.Summary))
+{
+  @WrapComment(" * ", Model.Summary)@:
+@: *
+}
+@if (!String.IsNullOrEmpty(Model.Description))
+{
+  @WrapComment(" * ", Model.Description)@:
+@: *
+}
+@foreach (var parameter in Model.LocalParameters)
+{
+    var compositeType = parameter.Type as CompositeType;
+    if (compositeType == null)
+    {
+@:@WrapComment(" * ", string.Format("@param {1} ${0} {2}", parameter.Name, parameter.Type.GetYardDocumentation(), parameter.Documentation))
+    }
+    else
+    {
+@:@Model.WrapComment(" * ", string.Format("@param array ${0} {2} {1}", parameter.Name, parameter.Type.GetYardDocumentation(), parameter.Documentation))
+    }
+}
+@Model.WrapComment(" * ", string.Format("@param array $customHeaders {0} An array of custom headers that will be added to the HTTP request.", "['key' => 'value']"))
+ *
+@if (Model.Responses.Count > 0)
+{
+@:@Model.WrapComment(" * ", string.Format("@return array"))
+    foreach (HttpStatusCode status in Model.Responses.Keys)
+    {
+        var body = Model.Responses[status].Body;
+        if (body == null)
+        {
+@:@Model.WrapComment(" * ", string.Format("Empty array with resposne status {0}({1}).<br>", status, status.GetHashCode().ToString()))
+        }
+        else
+        {
+@:@Model.WrapComment(" * ", string.Format("When the resposne status is {0}({1}), {2}", status, status.GetHashCode().ToString(), Model.Responses[status].Body.GetYardDocumentation()))
+        }
+    }
+}
+else
+{
+@Model.WrapComment(" * ", "@return array")
+}
+ */
+public function @(Model.Name)(@(Model.MethodParameterDeclaration))
+{
+    $response = $this->begin@(Model.Name)Async(@(Model.MethodParameterInvocation));
+    @EmptyLine
+
+    if ($response->getStatusCode() !== Resources::STATUS_OK) {
+        $this->_client->awaitAsync($response);
+    }
+    @EmptyLine
+    if ($response->getBody()) {
+        $contents = $response->getBody()->getContents();
+        if ($contents) {
+            return $this->_client->getDataSerializer()->unserialize($contents);
+        }
+    }
+    @EmptyLine
+    return [];
+}
+</text>
+}

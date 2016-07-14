@@ -1,0 +1,279 @@
+﻿@using System
+@using System.Linq
+@using AutoRest.Core.ClientModel
+@using AutoRest.Core.Utilities
+@using AutoRest.Extensions
+@using AutoRest.Php
+@using AutoRest.Php.Templates
+@using AutoRest.Php.TemplateModels
+@inherits AutoRest.Core.Template<AutoRest.Php.TemplateModels.ServiceClientTemplateModel>
+
+@(Include(new ModuleDefinitionTemplate(), Model.ModuleDefinitionTemplateModel))
+@EmptyLine
+namespace @Settings.Namespace;
+@EmptyLine
+
+@foreach (var include in Model.Includes)
+{
+@:@(include);
+}
+@EmptyLine
+
+/**
+ * @(Model.Documentation)
+ */
+class @Model.Name extends @Model.BaseType
+{
+@foreach (var property in Model.Properties)
+{
+    @:/**
+    @:@WrapComment(" * ", property.Documentation)
+    @: *
+    @:@WrapComment(" * ", string.Format("@var {0}", property.Type.GetYardDocumentation()))
+    @: */
+    @:private $_@(property.Name);
+}
+
+@foreach (var operation in Model.MethodGroups)
+{
+    @EmptyLine
+    @:/**
+    @:@WrapComment(" * ", string.Format("Method group: {0}.", operation))
+    @: *
+    @:@WrapComment(" * ", string.Format("@var {0}", operation))
+    @: */
+    @:private $_@(PhpCodeNamer.PhpCamelCase(operation));
+}
+ 
+    @EmptyLine
+    /**
+     * Base Url for the API.
+     *
+     * @@var string
+     */
+    private $_baseUrl = '@Model.BaseUrl';
+    @EmptyLine
+
+    /**
+     * Header filters for http calls.
+     *
+     * @@var array
+     */
+    private $_filters;
+    @EmptyLine
+
+    /**
+     * Retry intervals in number of seconds.
+     *
+     * @@var int
+     */
+    private $_retryInterval;
+    @EmptyLine
+    /**
+     * Constructor for the service client.
+     *
+     * @@param OAuthSettings $oauthSettings OAuth settings for to access the APIs
+     */
+    public function __construct($oauthSettings)
+    {
+        $this->_credentials = $oauthSettings;
+
+        parent::__construct(
+            $this->_credentials->getOAuthEndpointUri(),
+            $this->_credentials->getTenantId(),
+            new JsonSerializer()
+        );
+
+        $oauthService = new OAuthRestProxy($this->_credentials);
+        $authentification = new OAuthScheme($oauthService);
+        $this->_filters = [new OAuthFilter($authentification)];
+        @EmptyLine        
+        @foreach (var operation in Model.MethodGroups)
+        {
+        @:$this->_@(PhpCodeNamer.PhpCamelCase(operation)) = new @(operation)($this);
+        }
+
+        @EmptyLine
+        @foreach (var property in Model.Properties)
+        {
+            if (property.DefaultValue != null)
+            {
+        @:$this->set@(property.Name.ToPascalCase())(@(property.DefaultValue));
+            }
+        }
+        $this->setRetryInterval(5);
+    }
+    @foreach (var property in Model.Properties)
+    {
+    @EmptyLine
+    @:/**
+    @:@WrapComment(" * ", string.Format("Gets {0}, {1}", property.Name, property.Documentation.TrimGetsSets()))
+    @: *
+    @:@WrapComment(" * ", string.Format("@return {0}", property.Type.GetYardDocumentation()))
+    @: */
+    @:public function get@(property.Name.ToPascalCase())()
+    @:{
+    @:    return $this->_@(property.Name);
+    @:}
+
+    @EmptyLine
+    @:/**
+    @:@WrapComment(" * ", string.Format("Sets {0}, {1}", property.Name, property.Documentation.TrimGetsSets()))
+    @: *
+    @:@WrapComment(" * ", string.Format("@param {0} ${1}", property.Type.GetYardDocumentation(), property.Name))
+    @: *
+    @:@WrapComment(" * ", "@return none")
+    @: */
+    if (property.IsReadOnly)
+    {
+    @:private function set@(property.Name.ToPascalCase())($@(property.Name))
+    @:{
+    }
+    else
+    {
+    @:public function set@(property.Name.ToPascalCase())($@(property.Name))
+    @:{
+    }
+    @:    $this->_@(property.Name) = $@(property.Name);
+          if (string.Compare(property.Name, "longRunningOperationRetryTimeout", StringComparison.InvariantCultureIgnoreCase) == 0)
+          {
+    @:    set_time_limit($@(property.Name));
+          }
+    @:}
+    }
+
+    @foreach (var operation in Model.MethodGroups)
+    {
+    @EmptyLine
+    @:/**
+    @:@WrapComment(" * ", string.Format("Gets method group {0}.", operation))
+    @: *
+    @:@WrapComment(" * ", string.Format("@return {0}", operation))
+    @: */
+    @:public function get@(operation)()
+    @:{
+    @:    return $this->_@(PhpCodeNamer.PhpCamelCase(operation));
+    @:}
+    }
+
+    @EmptyLine
+    /**
+     * Gets filter for http requests.
+     *
+     * @@return array, OAuth filters
+     */
+    public function getFilters()
+    {
+        return $this->_filters;
+    }
+    @EmptyLine
+    /**
+     * Gets the data serializer.
+     *
+     * @@return JsonSerializer, the data serializer
+     */
+    public function getDataSerializer()
+    {
+        return $this->dataSerializer;
+    }
+    @EmptyLine
+    /**
+     * Gets host full Url for a relative path.
+     *
+     * @@param string $path
+     *
+     * @@return string, full Url
+     */
+    public function getUrl($path)
+    {
+        return $this->_baseUrl.$path;
+    }
+    @EmptyLine
+    /**
+     * Gets retry intervals in number of seconds.
+     *
+     * @@return int, number of seconds
+     */
+    public function getRetryInterval()
+    {
+        return $this->_retryInterval;
+    }
+    @EmptyLine
+    /**
+     * Sets retry intervals in number of seconds.
+     *
+     * @@param int $retryInterval
+     *
+     * @@return none
+     */
+    public function setRetryInterval($retryInterval)
+    {
+        $this->_retryInterval = $retryInterval;
+    }
+    @EmptyLine
+    /**
+     * Poll for the async status of a request.
+     *
+     * @@param string $path
+     * @@param string $requestId from x-ms-request-id in the header
+     *
+     * @@return string, status code, 200 or 202
+     */
+    public function pollAsyncOperation($path, $requestId)
+    {
+        $queryParams = [Resources::API_VERSION => '@(Model.ApiVersion)', 'monitor' => 'true'];
+        $method = Resources::HTTP_GET;
+        $statusCodes = [Resources::STATUS_OK, Resources::STATUS_ACCEPTED];
+        @EmptyLine
+        $headers = [Resources::X_MS_REQUEST_ID => $requestId];
+        $body = '';
+        @EmptyLine
+        $response = HttpClient::send(
+            $method,
+            $headers,
+            $queryParams,
+            [],
+            $path,
+            $statusCodes,
+            $body,
+            $this->getFilters()
+        );
+        @EmptyLine
+        return $response->getStatusCode();
+    }
+    @EmptyLine
+    /**
+     * Wait for the async request to finish.
+     *
+     * @@param Response $response
+     *
+     * @@return string, status code
+     */
+    public function awaitAsync($response)
+    {
+        $status = $response->getStatusCode();
+        @*echo "The incoming status is $status in awaitAsync()\n";*@
+        $headers = $response->getHeaders();
+        @EmptyLine
+        if (array_key_exists(Resources::XTAG_LOCATION, $headers) && array_key_exists(Resources::X_MS_REQUEST_ID, $headers)) {
+            $locations = $headers[Resources::XTAG_LOCATION];
+            $requestIds = $headers[Resources::X_MS_REQUEST_ID];
+            @EmptyLine
+            while ($status == Resources::STATUS_ACCEPTED) {
+                sleep($this->getRetryInterval());
+                $status = $this->pollAsyncOperation($locations[0], $requestIds[0]);
+                echo '.';
+            }
+        }
+        @EmptyLine
+        @*echo "The outgoing status is $status in awaitAsync\n";*@
+        return $status;
+    }
+
+    @foreach (var method in Model.MethodTemplateModels)
+    {
+       @EmptyLine
+       @:@(Include(new MethodTemplate(), method))
+       @EmptyLine
+    }
+}

@@ -1,0 +1,153 @@
+﻿@using System
+@using System.Net
+@using System.Linq
+@using AutoRest.Core.ClientModel
+@using AutoRest.Php
+@using AutoRest.Php.TemplateModels
+@inherits AutoRest.Core.Template<AutoRest.Php.TemplateModels.MethodTemplateModel>
+
+/**
+@if (!String.IsNullOrEmpty(Model.Summary))
+{
+  @WrapComment(" * ", Model.Summary)@:
+@: *
+}
+@if (!String.IsNullOrEmpty(Model.Description))
+{
+  @WrapComment(" * ", Model.Description)@:
+@: *
+}
+@foreach (var parameter in Model.LocalParameters.Where(p => !p.IsConstant))
+{
+    var compositeType = parameter.Type as CompositeType;
+    if (compositeType == null)
+    {
+@:@WrapComment(" * ", string.Format("@param {1} ${0} {2}", parameter.Name, parameter.Type.GetYardDocumentation(), parameter.Documentation))
+    }
+    else
+    {
+@:@Model.WrapComment(" * ", string.Format("@param array ${0} {2} {1}", parameter.Name, parameter.Type.GetYardDocumentation(), parameter.Documentation))
+    }
+}
+@Model.WrapComment(" * ", string.Format("@param array $customHeaders {0} An array of custom headers that will be added to the HTTP request.", "['key' => 'value']"))
+ *
+@if (Model.Responses.Count > 0)
+{
+@:@Model.WrapComment(" * ", string.Format("@return array"))
+    foreach (HttpStatusCode status in Model.Responses.Keys)
+    {
+        var body = Model.Responses[status].Body;
+        if (body == null)
+        {
+@:@Model.WrapComment(" * ", string.Format("Empty array with resposne status {0}({1}).<br>", status, status.GetHashCode().ToString()))
+        }
+        else
+        {
+@:@Model.WrapComment(" * ", string.Format("When the resposne status is {0}({1}), {2}", status, status.GetHashCode().ToString(), Model.Responses[status].Body.GetYardDocumentation()))
+        }
+    }
+}
+else
+{
+@Model.WrapComment(" * ", "@return array")
+}
+ */
+public function @(Model.Name)(@(Model.MethodParameterDeclaration))
+{
+    $response = $this->@(Model.Name)Async(@(Model.MethodParameterInvocation));
+    @*if ( $response->getStatusCode() !== 200) {
+        $this->_client->awaitAsync($response);
+    }*@
+    @EmptyLine
+    if ($response->getBody()) {
+        $contents = $response->getBody()->getContents();
+        if ($contents) {
+            return $this->_client->getDataSerializer()->unserialize($contents);
+        }
+    }
+    @EmptyLine
+    return [];
+}
+@EmptyLine
+/**
+@if (!String.IsNullOrEmpty(Model.Summary))
+{
+  @WrapComment(" * ", Model.Summary)@:
+@: *
+}
+@if (!String.IsNullOrEmpty(Model.Description))
+{
+  @WrapComment(" * ", Model.Description)@:
+@: *
+}
+@foreach (var parameter in Model.LocalParameters.Where(p => !p.IsConstant))
+{
+    var compositeType = parameter.Type as CompositeType;
+    if (compositeType == null)
+    {
+@:@WrapComment(" * ", string.Format("@param {1} ${0} {2}", parameter.Name, parameter.Type.GetYardDocumentation(), parameter.Documentation))
+    }
+    else
+    {
+@:@Model.WrapComment(" * ", string.Format("@param array ${0} {2} {1}", parameter.Name, parameter.Type.GetYardDocumentation(), parameter.Documentation))
+    }
+}
+@WrapComment(" * ", string.Format("@param array $customHeaders {0} An array of custom headers that will be added to the HTTP request.", "['key' => 'value']"))
+ *
+@Model.WrapComment(" * ", "@return \\GuzzleHttp\\Psr7\\Response")
+ */
+public function @(Model.Name)Async(@(Model.MethodParameterDeclaration))
+{
+    @foreach (var parameter in Model.ParameterTemplateModels.Where(p => !p.IsConstant))
+    {
+        if (parameter.IsRequired)
+        {
+    @:if ($@(parameter.Name) == null) {
+    @:    Validate::notNullOrEmpty($@(parameter.Name), '$@(parameter.Name)');
+    @:}
+       }
+    }
+    @EmptyLine 
+    $path = '@(Model.Url)';
+    $statusCodes = [@(Model.SuccessStatusCodeList)];
+    $method = '@(Model.HttpMethod.ToString().ToUpper())';
+    @EmptyLine 
+    $path = strtr($path, @(Model.PathParamsPhpDict));
+    $queryParams = @(Model.QueryParamsPhpDict);
+    $headers = $customHeaders;
+    
+    @foreach (var parameter in Model.Headers)
+    {
+    @:if ($@(parameter.Name) != null) {
+    @:    $headers['@(parameter.SerializedName)'] = $@parameter.Name;
+    @:}
+    }
+    @if (Model.ServiceClient.Properties.Exists(p => string.Compare(p.Name, "generateClientRequestId", StringComparison.InvariantCultureIgnoreCase) == 0))
+    {
+    @:if ($this->_client->getGenerateClientRequestId()) {
+    @:    $headers[Resources::X_MS_REQUEST_ID] = Utilities::getGuid();
+    @:}
+    }
+    @EmptyLine
+    @if (Model.RequestBody != null) {
+    @:$headers['Content-Type'] = '@(Model.RequestContentType)';
+    @:$body = $this->_client->getDataSerializer()->serialize($@(Model.RequestBody.Name));
+    }
+    else
+    {
+    @:$body = '';
+    }
+    @EmptyLine
+    $response = HttpClient::send(
+        $method,
+        $headers,
+        $queryParams,
+        [],
+        $this->_client->getUrl($path),
+        $statusCodes,
+        $body,
+        $this->_client->getFilters()
+    );
+    @EmptyLine
+    return $response;
+}

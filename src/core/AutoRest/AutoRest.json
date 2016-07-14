@@ -35,6 +35,12 @@
     },
     "AzureResourceSchema": {
       "type": "AzureResourceSchemaCodeGenerator, AutoRest.AzureResourceSchema"
+    },
+    "Php": {
+      "type": "PhpCodeGenerator, AutoRest.Php"
+    },
+    "Azure.Php": {
+      "type": "AzurePhpCodeGenerator, AutoRest.Php.Azure"
     }
   },
   "modelers": {
