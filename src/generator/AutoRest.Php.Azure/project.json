@@ -4,7 +4,7 @@
 
   "packOptions": {
     "summary": "AutoRest Azure Php Generator",
-    "tags": [ "Microsoft AutoRest Azure Generator Ruby" ],
+    "tags": [ "Microsoft AutoRest Azure Generator Php" ],
     "projectUrl": "https://github.com/Azure/AutoRest",
     "licenseUrl": "https://raw.githubusercontent.com/Microsoft/dotnet/master/LICENSE"
   },

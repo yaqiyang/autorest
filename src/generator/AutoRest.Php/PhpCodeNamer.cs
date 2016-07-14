@@ -1,19 +1,17 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using AutoRest.Core;
 using AutoRest.Core.ClientModel;
 using AutoRest.Core.Utilities;
 using AutoRest.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace AutoRest.Php
 {
-    using System.Text.RegularExpressions;
-
     /// <summary>
     /// A class which keeps all naming related functionality.
     /// </summary>

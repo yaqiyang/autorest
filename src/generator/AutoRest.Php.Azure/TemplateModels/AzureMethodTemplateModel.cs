@@ -1,16 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using AutoRest.Core.ClientModel;
+using AutoRest.Core.Utilities;
+using AutoRest.Extensions.Azure;
+using AutoRest.Php.Azure.Properties;
+using AutoRest.Php.TemplateModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using AutoRest.Core.ClientModel;
-using AutoRest.Core.Utilities;
-using AutoRest.Php.TemplateModels;
-using AutoRest.Extensions.Azure;
-using AutoRest.Php.Azure.Properties;
 
 namespace AutoRest.Php.Azure.TemplateModels
 {

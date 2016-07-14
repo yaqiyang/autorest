@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System.Collections.Generic;
 using AutoRest.Core.ClientModel;
 using AutoRest.Core.Utilities;
 using AutoRest.Php.TemplateModels;
+using System.Collections.Generic;
 
 namespace AutoRest.Php.Azure.TemplateModels
 {
@@ -91,6 +91,9 @@ namespace AutoRest.Php.Azure.TemplateModels
             }
         }
 
+        /// <summary>
+        /// The namespaces used by the Php template model
+        /// </summary>
         public override List<string> ClassNamespaces
         {
             get

@@ -2,17 +2,16 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using AutoRest.Core.ClientModel;
+using AutoRest.Core.Utilities;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using AutoRest.Core.Utilities;
 
 namespace AutoRest.Php
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// Keeps a few aux method used across all templates/models.
     /// </summary>

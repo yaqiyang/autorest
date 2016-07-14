@@ -1,13 +1,12 @@
-@using System
-@using System.Net
+@using AutoRest.Core.ClientModel;
 @using AutoRest.Php
-@using AutoRest.Php.TemplateModels
-@using AutoRest.Php.Templates
 @using AutoRest.Php.Azure.TemplateModels
 @using AutoRest.Php.Azure.Templates
-@using AutoRest.Core.ClientModel;
+@using AutoRest.Php.TemplateModels
+@using AutoRest.Php.Templates
+@using System
+@using System.Net
 @inherits AutoRest.Core.Template<AutoRest.Php.Azure.TemplateModels.AzureMethodTemplateModel>
-
 
 @if (!Model.IsLongRunningOperation)
 {

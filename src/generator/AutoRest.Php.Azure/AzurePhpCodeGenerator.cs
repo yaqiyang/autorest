@@ -1,18 +1,18 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoRest.Php.Templates;
-using AutoRest.Php.Azure.TemplateModels;
-using AutoRest.Php.Azure.Templates;
-using Newtonsoft.Json;
-using AutoRest.Php.TemplateModels;
 using AutoRest.Core;
 using AutoRest.Core.ClientModel;
 using AutoRest.Extensions.Azure;
 using AutoRest.Extensions.Azure.Model;
+using AutoRest.Php.Azure.TemplateModels;
+using AutoRest.Php.Azure.Templates;
+using AutoRest.Php.TemplateModels;
+using AutoRest.Php.Templates;
+using Newtonsoft.Json;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AutoRest.Php.Azure
 {
