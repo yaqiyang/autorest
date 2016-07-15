@@ -31,9 +31,9 @@ class @(Model.MethodGroupName)
      * @@param @Model.ServiceClient.Name, Service client for @(Model.MethodGroupName)
      */
     public function __construct($client)
-     {
+    {
         $this->_client = $client;
-     }
+    }
     @foreach(var method in Model.MethodTemplateModels)
      {
          @EmptyLine

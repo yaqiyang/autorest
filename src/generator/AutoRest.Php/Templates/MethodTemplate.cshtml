@@ -123,7 +123,7 @@ public function @(Model.Name)Async(@(Model.MethodParameterDeclaration))
     @:}
     }
     @if (Model.ServiceClient.Properties.Exists(p => string.Compare(p.Name, "generateClientRequestId", StringComparison.InvariantCultureIgnoreCase) == 0))
-    {
+    {@:
     @:if ($this->_client->getGenerateClientRequestId()) {
     @:    $headers[Resources::X_MS_REQUEST_ID] = Utilities::getGuid();
     @:}
