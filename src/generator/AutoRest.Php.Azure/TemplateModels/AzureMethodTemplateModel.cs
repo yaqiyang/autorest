@@ -114,11 +114,11 @@ namespace AutoRest.Php.Azure.TemplateModels
                     @"MicrosoftAzure\Common\Internal\Authentication\OAuthScheme",
                     @"MicrosoftAzure\Common\Internal\Filters\OAuthFilter",
                     @"MicrosoftAzure\Common\Internal\Http\HttpClient",
-                    @"MicrosoftAzure\Common\Internal\OAuthRestProxy",
                     @"MicrosoftAzure\Common\Internal\Resources",
                     @"MicrosoftAzure\Common\Internal\Serialization\JsonSerializer",
-                    @"MicrosoftAzure\Common\Internal\ServiceRestProxy",
                     @"MicrosoftAzure\Common\Internal\Utilities",
+                    @"MicrosoftAzure\Common\OAuthServiceClient",
+                    @"MicrosoftAzure\Common\RestServiceClient"
                 };
             }
         }

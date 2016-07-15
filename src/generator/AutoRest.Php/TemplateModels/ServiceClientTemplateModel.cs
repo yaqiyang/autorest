@@ -59,7 +59,7 @@ namespace AutoRest.Php.TemplateModels
         {
             get
             {
-                return "ServiceRestProxy";
+                return "RestServiceClient";
             }
         }
 

@@ -20,7 +20,7 @@ namespace @Settings.Namespace;
 @EmptyLine
 
 /**
- * @(Model.Documentation)
+ * @(!string.IsNullOrWhiteSpace(Model.Documentation) ? Model.Documentation : Model.Name)
  */
 class @Model.Name extends @Model.BaseType
 {
@@ -80,11 +80,10 @@ class @Model.Name extends @Model.BaseType
 
         parent::__construct(
             $this->_credentials->getOAuthEndpointUri(),
-            $this->_credentials->getTenantId(),
             new JsonSerializer()
         );
 
-        $oauthService = new OAuthRestProxy($this->_credentials);
+        $oauthService = new OAuthServiceClient($this->_credentials);
         $authentification = new OAuthScheme($oauthService);
         $this->_filters = [new OAuthFilter($authentification)];
         @EmptyLine        

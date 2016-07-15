@@ -38,10 +38,10 @@ namespace AutoRest.Php.Azure.TemplateModels
                     @"use MicrosoftAzure\Common\Internal\Authentication\OAuthScheme",
                     @"use MicrosoftAzure\Common\Internal\Filters\OAuthFilter",
                     @"use MicrosoftAzure\Common\Internal\Http\HttpClient",
-                    @"use MicrosoftAzure\Common\Internal\OAuthRestProxy",
                     @"use MicrosoftAzure\Common\Internal\Resources",
                     @"use MicrosoftAzure\Common\Internal\Serialization\JsonSerializer",
-                    @"use MicrosoftAzure\Common\Internal\ServiceRestProxy",
+                    @"use MicrosoftAzure\Common\OAuthServiceClient",
+                    @"use MicrosoftAzure\Common\RestServiceClient",
                 };
             }
         }
@@ -53,7 +53,7 @@ namespace AutoRest.Php.Azure.TemplateModels
         {
             get
             {
-                return "ServiceRestProxy";
+                return "RestServiceClient";
             }
         }
     }

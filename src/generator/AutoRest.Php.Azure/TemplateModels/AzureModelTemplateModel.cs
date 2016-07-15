@@ -81,12 +81,12 @@ namespace AutoRest.Php.Azure.TemplateModels
                     @"use MicrosoftAzure\Common\Internal\Authentication\OAuthScheme",
                     @"use MicrosoftAzure\Common\Internal\Filters\OAuthFilter",
                     @"use MicrosoftAzure\Common\Internal\Http\HttpClient",
-                    @"use MicrosoftAzure\Common\Internal\OAuthRestProxy",
                     @"use MicrosoftAzure\Common\Internal\Resources",
                     @"use MicrosoftAzure\Common\Internal\Serialization\JsonSerializer",
-                    @"use MicrosoftAzure\Common\Internal\ServiceRestProxy",
                     @"use MicrosoftAzure\Common\Internal\Utilities",
-                    @"use MicrosoftAzure\Common\Internal\Validate"
+                    @"use MicrosoftAzure\Common\Internal\Validate",
+                    @"use MicrosoftAzure\Common\OAuthServiceClient",
+                    @"use MicrosoftAzure\Common\RestServiceClient"
                 };
             }
         }
@@ -103,12 +103,12 @@ namespace AutoRest.Php.Azure.TemplateModels
                     @"MicrosoftAzure\Common\Internal\Authentication\OAuthScheme",
                     @"MicrosoftAzure\Common\Internal\Filters\OAuthFilter",
                     @"MicrosoftAzure\Common\Internal\Http\HttpClient",
-                    @"MicrosoftAzure\Common\Internal\OAuthRestProxy",
                     @"MicrosoftAzure\Common\Internal\Resources",
                     @"MicrosoftAzure\Common\Internal\Serialization\JsonSerializer",
-                    @"MicrosoftAzure\Common\Internal\ServiceRestProxy",
                     @"MicrosoftAzure\Common\Internal\Utilities",
-                    @"MicrosoftAzure\Common\Internal\Validate"
+                    @"MicrosoftAzure\Common\Internal\Validate",
+                    @"MicrosoftAzure\Common\OAuthServiceClient",
+                    @"MicrosoftAzure\Common\RestServiceClient"
             };
             }
         }
