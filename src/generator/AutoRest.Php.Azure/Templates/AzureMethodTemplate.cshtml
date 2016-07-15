@@ -38,7 +38,7 @@ else
 @:@Model.WrapComment(" * ", string.Format("@param array ${0} {2} {1}", parameter.Name, parameter.Type.GetYardDocumentation(), parameter.Documentation))
     }
 }
-@Model.WrapComment(" * ", string.Format("@param array $customHeaders {0} An array of custom headers that will be added to the HTTP request.", "['key' => 'value']"))
+@Model.WrapComment(" * ", string.Format("@param array $customHeaders An array of custom headers {0} that will be added to the HTTP request.", "['key' => 'value']"))
  *
 @if (Model.Responses.Count > 0)
 {
