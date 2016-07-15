@@ -337,6 +337,12 @@ namespace AutoRest.Php
 
         private static string DocumentCompositeType(CompositeType compositeType, int level = 0, bool parentRequired = false)
         {
+            // infinite loops possible in some cases
+            if (level >= 5)
+            {
+                return string.Empty;
+            }
+
             List<string> phpArray = new List<string>();
 
             foreach (Property prop in compositeType.Properties)

@@ -80,12 +80,12 @@ class @Model.Name extends @Model.BaseType
 
         parent::__construct(
             $this->_credentials->getOAuthEndpointUri(),
-            new JsonSerializer()
+            new PhpJsonSerializer()
         );
 
-        $oauthService = new OAuthServiceClient($this->_credentials);
-        $authentification = new OAuthScheme($oauthService);
-        $this->_filters = [new OAuthFilter($authentification)];
+        $oauthService = new PhpOAuthServiceClient($this->_credentials);
+        $authentification = new PhpOAuthScheme($oauthService);
+        $this->_filters = [new PhpOAuthFilter($authentification)];
         @EmptyLine        
         @foreach (var operation in Model.MethodGroups)
         {
@@ -220,14 +220,14 @@ class @Model.Name extends @Model.BaseType
      */
     public function pollAsyncOperation($path, $requestId)
     {
-        $queryParams = [Resources::API_VERSION => '@(Model.ApiVersion)', 'monitor' => 'true'];
-        $method = Resources::HTTP_GET;
-        $statusCodes = [Resources::STATUS_OK, Resources::STATUS_ACCEPTED];
+        $queryParams = [PhpResources::API_VERSION => '@(Model.ApiVersion)', 'monitor' => 'true'];
+        $method = PhpResources::HTTP_GET;
+        $statusCodes = [PhpResources::STATUS_OK, Resources::STATUS_ACCEPTED];
         @EmptyLine
-        $headers = [Resources::X_MS_REQUEST_ID => $requestId];
+        $headers = [PhpResources::X_MS_REQUEST_ID => $requestId];
         $body = '';
         @EmptyLine
-        $response = HttpClient::send(
+        $response = PhpHttpClient::send(
             $method,
             $headers,
             $queryParams,
@@ -254,11 +254,11 @@ class @Model.Name extends @Model.BaseType
         @*echo "The incoming status is $status in awaitAsync()\n";*@
         $headers = $response->getHeaders();
         @EmptyLine
-        if (array_key_exists(Resources::XTAG_LOCATION, $headers) && array_key_exists(Resources::X_MS_REQUEST_ID, $headers)) {
-            $locations = $headers[Resources::XTAG_LOCATION];
-            $requestIds = $headers[Resources::X_MS_REQUEST_ID];
+        if (array_key_exists(PhpResources::XTAG_LOCATION, $headers) && array_key_exists(PhpResources::X_MS_REQUEST_ID, $headers)) {
+            $locations = $headers[PhpResources::XTAG_LOCATION];
+            $requestIds = $headers[PhpResources::X_MS_REQUEST_ID];
             @EmptyLine
-            while ($status == Resources::STATUS_ACCEPTED) {
+            while ($status == PhpResources::STATUS_ACCEPTED) {
                 sleep($this->getRetryInterval());
                 $status = $this->pollAsyncOperation($locations[0], $requestIds[0]);
                 echo '.';

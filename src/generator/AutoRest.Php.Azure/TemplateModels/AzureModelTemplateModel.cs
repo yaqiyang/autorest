@@ -78,15 +78,15 @@ namespace AutoRest.Php.Azure.TemplateModels
             {
                 return new List<string>
                 {
-                    @"use MicrosoftAzure\Common\Internal\Authentication\OAuthScheme",
-                    @"use MicrosoftAzure\Common\Internal\Filters\OAuthFilter",
-                    @"use MicrosoftAzure\Common\Internal\Http\HttpClient",
-                    @"use MicrosoftAzure\Common\Internal\Resources",
-                    @"use MicrosoftAzure\Common\Internal\Serialization\JsonSerializer",
-                    @"use MicrosoftAzure\Common\Internal\Utilities",
-                    @"use MicrosoftAzure\Common\Internal\Validate",
-                    @"use MicrosoftAzure\Common\OAuthServiceClient",
-                    @"use MicrosoftAzure\Common\RestServiceClient"
+                    @"use MicrosoftAzure\Common\Internal\Authentication\OAuthScheme as PhpOAuthScheme",
+                    @"use MicrosoftAzure\Common\Internal\Filters\OAuthFilter as PhpOAuthFilter",
+                    @"use MicrosoftAzure\Common\Internal\Http\HttpClient as PhpHttpClient",
+                    @"use MicrosoftAzure\Common\Internal\Resources as PhpResources",
+                    @"use MicrosoftAzure\Common\Internal\Serialization\JsonSerializer as PhpJsonSerializer",
+                    @"use MicrosoftAzure\Common\Internal\Utilities as PhpUtilities",
+                    @"use MicrosoftAzure\Common\Internal\Validate as PhpValidate",
+                    @"use MicrosoftAzure\Common\OAuthServiceClient as PhpOAuthServiceClient",
+                    @"use MicrosoftAzure\Common\RestServiceClient as PhpRestServiceClient"
                 };
             }
         }

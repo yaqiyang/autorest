@@ -40,10 +40,10 @@ namespace AutoRest.Php.Azure.TemplateModels
             {
                 return new List<string>
                 {
-                    @"use MicrosoftAzure\Common\Internal\Http\HttpClient",
-                    @"use MicrosoftAzure\Common\Internal\Resources",
-                    @"use MicrosoftAzure\Common\Internal\Utilities",
-                    @"use MicrosoftAzure\Common\Internal\Validate",
+                    @"use MicrosoftAzure\Common\Internal\Http\HttpClient as PhpHttpClient",
+                    @"use MicrosoftAzure\Common\Internal\Resources as PhpResources",
+                    @"use MicrosoftAzure\Common\Internal\Utilities as PhpUtilities",
+                    @"use MicrosoftAzure\Common\Internal\Validate as PhpValidate",
             };
             }
         }
