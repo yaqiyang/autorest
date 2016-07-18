@@ -103,7 +103,7 @@ public function @(Model.Name)Async(@(Model.MethodParameterDeclaration))
         if (parameter.IsRequired)
         {
     @:if ($@(parameter.Name) == null) {
-    @:    PhpValidate::notNullOrEmpty($@(parameter.Name), '$@(parameter.Name)');
+    @:    Validate::notNullOrEmpty($@(parameter.Name), '$@(parameter.Name)');
     @:}
        }
     }
@@ -125,7 +125,7 @@ public function @(Model.Name)Async(@(Model.MethodParameterDeclaration))
     @if (Model.ServiceClient.Properties.Exists(p => string.Compare(p.Name, "generateClientRequestId", StringComparison.InvariantCultureIgnoreCase) == 0))
     {@:
     @:if ($this->_client->getGenerateClientRequestId()) {
-    @:    $headers[PhpResources::X_MS_REQUEST_ID] = PhpUtilities::getGuid();
+    @:    $headers[Resources::X_MS_REQUEST_ID] = Utilities::getGuid();
     @:}
     }
     @EmptyLine
@@ -138,7 +138,7 @@ public function @(Model.Name)Async(@(Model.MethodParameterDeclaration))
     @:$body = '';
     }
     @EmptyLine
-    $response = PhpHttpClient::send(
+    $response = HttpClient::send(
         $method,
         $headers,
         $queryParams,

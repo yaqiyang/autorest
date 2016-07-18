@@ -36,6 +36,7 @@ namespace AutoRest.Php
                 "insteadof", "interface", "isset", "list", "namespace", "new", "or", "print", "private", "protected",
                 "public", "require", "require_once", "return", "static", "switch", "throw", "trait", "try", "unset",
                 "use", "var", "while", "xor",
+                "Resources", "Utilities", "Validate", "HttpClient", "OAuthFilter", "OAuthScheme",
                 "__CLASS__", "__DIR__", "__FILE__", "__FUNCTION__", "__LINE__", "__METHOD__", "__NAMESPACE__", "__TRAIT__"
             }.ForEach(s => ReservedWords.Add(s));
 
