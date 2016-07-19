@@ -1,6 +1,6 @@
 REM -- Must change the following two lines to point to the correct local folders!
 set autorest=src\core\AutoRest\bin\Debug\net451\win7-x64\AutoRest.exe
-set outfolder=D:\Repos\php-sdk-dev\src\Arm
+set outfolder=D:\Repos\azure-sdk-for-php-arm\src\Arm
 
 set master=https://raw.githubusercontent.com/azure/azure-rest-api-specs/master
 
