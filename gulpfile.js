@@ -30,7 +30,7 @@ process.env.MSBUILDDISABLENODEREUSE = 1;
 
 function GetAutoRestFolder() {
   if (isWindows) {
-    return "src/core/AutoRest/bin/Release/net451/win7-x64/";
+    return "src/core/AutoRest/bin/Debug/net451/win7-x64/";
   }
   if( isMac ) {
 	return "src/core/AutoRest/bin/Debug/net451/osx.10.11-x64/";
@@ -549,7 +549,7 @@ gulp.task('regenerate:expected:csazurecomposite', function (cb) {
 });
 
 gulp.task('regenerate:expected:samples', ['regenerate:expected:samples:azure'], function(){
-  var autorestConfigPath = path.join(basePathOrThrow(), GetAutoRestFolder() + 'AutoRest.Release.json');
+  var autorestConfigPath = path.join(basePathOrThrow(), GetAutoRestFolder() + 'AutoRest.json');
   var content = fs.readFileSync(autorestConfigPath).toString();
   if (content.charCodeAt(0) === 0xFEFF) {
     content = content.slice(1);
@@ -567,7 +567,7 @@ gulp.task('regenerate:expected:samples', ['regenerate:expected:samples:azure'], 
 });
 
 gulp.task('regenerate:expected:samples:azure', function(){
-  var autorestConfigPath = path.join(basePathOrThrow(), GetAutoRestFolder() + 'AutoRest.Release.json');
+  var autorestConfigPath = path.join(basePathOrThrow(), GetAutoRestFolder() + 'AutoRest.json');
   var content = fs.readFileSync(autorestConfigPath).toString();
   if (content.charCodeAt(0) === 0xFEFF) {
     content = content.slice(1);
