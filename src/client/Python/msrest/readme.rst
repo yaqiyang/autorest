@@ -15,11 +15,19 @@ To install:
 Release History
 ---------------
 
-2016-xx-xx Version xxxxx
+2016-08-15 Version 0.4.2
 ++++++++++++++++++++++++
 
 **Bugfixes**
 
+- Fix serialization if "object" type contains None (https://github.com/Azure/autorest/issues/1353)
+
+2016-08-08 Version 0.4.1
+++++++++++++++++++++++++
+
+**Bugfixes**
+
+- Fix compatibility issues with requests 2.11.0 (https://github.com/Azure/autorest/issues/1337)
 - Allow url of ClientRequest to have parameters (https://github.com/Azure/autorest/issues/1217)
 
 2016-05-25 Version 0.4.0

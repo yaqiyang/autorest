@@ -513,6 +513,8 @@ class Serializer(object):
         :param dict attr: Object to be serialized.
         :rtype: dict or str
         """
+        if attr is None:
+            return None
         obj_type = type(attr)
         if obj_type in self.basic_types:
             return self.serialize_basic(attr, self.basic_types[obj_type])
@@ -603,6 +605,8 @@ class Serializer(object):
         :param Date attr: Object to be serialized.
         :rtype: str
         """
+        if isinstance(attr, str):
+            attr = isodate.parse_date(attr)
         t = "{:04}-{:02}-{:02}".format(attr.year, attr.month, attr.day)
         return t
 
@@ -613,6 +617,8 @@ class Serializer(object):
         :param TimeDelta attr: Object to be serialized.
         :rtype: str
         """
+        if isinstance(attr, str):
+            attr = isodate.parse_duration(attr)
         return isodate.duration_isoformat(attr)
 
     @staticmethod
